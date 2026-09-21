@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⏱️ Desk Stretch Timer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>body{font-family:'Nunito',sans-serif}circle{transition:stroke-dashoffset 1s linear}</style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 p-8">
+<div class="max-w-lg mx-auto text-center">
+    <h1 class="text-3xl font-extrabold text-green-700 mb-2">⏱️ Desk Stretch Timer</h1>
+    <p class="text-gray-500 mb-6">2 minute stretch breaks for better health</p>
+
+    <div class="bg-white rounded-3xl shadow-2xl p-8 mb-6">
+        <div class="text-sm text-gray-500 uppercase tracking-wider mb-2">Current Stretch</div>
+        <div class="text-2xl font-bold text-green-600 mb-4" id="stretchTitle">{{ current.title }}</div>
+        <div class="bg-green-50 rounded-xl p-4 mb-6 text-gray-700 text-sm">{{ current.instruction }}</div>
+
+        <div class="relative w-48 h-48 mx-auto mb-6">
+            <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="45" stroke="#e5e7eb" stroke-width="8" fill="none"/>
+                <circle cx="50" cy="50" r="45" stroke="#22c55e" stroke-width="8" fill="none" stroke-dasharray="283" stroke-dashoffset="283" stroke-linecap="round" id="timerCircle"/>
+            </svg>
+            <div class="absolute inset-0 flex flex-col items-center justify-center">
+                <div class="text-4xl font-black text-green-600" id="timeDisplay">2:00</div>
+                <div class="text-sm text-gray-400">remaining</div>
+            </div>
+        </div>
+
+        <div class="flex justify-center gap-4">
+            <button id="startBtn" onclick="toggleTimer()" class="bg-gradient-to-r from-green-400 to-green-500 text-white font-bold py-3 px-8 rounded-full text-lg hover:scale-105 transition">▶ Start</button>
+            <button onclick="resetTimer()" class="bg-gray-200 text-gray-700 font-bold py-3 px-6 rounded-full hover:bg-gray-300 transition">↺ Reset</button>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-lg p-6">
+        <h3 class="font-bold text-gray-700 mb-3">All Stretches</h3>
+        <div class="grid grid-cols-5 gap-2 text-center">
+            {% for s in stretches %}
+                <div class="p-2 rounded-xl {{ 'bg-green-100' if s.title == current.title else 'bg-gray-50' }} text-xs">{{ s.title }}</div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div id="completionBanner" class="hidden fixed inset-0 bg-green-500/90 flex items-center justify-center z-50">
+        <div class="bg-white rounded-3xl p-12 text-center shadow-2xl">
+            <div class="text-6xl mb-4">🎉</div>
+            <h2 class="text-2xl font-extrabold text-green-700 mb-2">Great job!</h2>
+            <p class="text-gray-600 mb-4">Time to get back to work!</p>
+            <button onclick="closeBanner()" class="bg-green-500 text-white font-bold py-3 px-8 rounded-full hover:bg-green-600 transition">Continue</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const stretches = {{ stretches|tojson }};
+let timeLeft=120,totalTime=120,isRunning=false,intervalId;
+const CIRCUMFERENCE = 283;
+
+function toggleTimer(){
+    if(isRunning){pauseTimer();}else{startTimer();}
+}
+function startTimer(){
+    isRunning=true;
+    document.getElementById('startBtn').textContent='⏸ Pause';
+    intervalId=setInterval(()=>{
+        timeLeft--;
+        updateDisplay();
+        if(timeLeft<=0){completeTimer();}
+    },1000);
+}
+function pauseTimer(){
+    isRunning=false;
+    document.getElementById('startBtn').textContent='▶ Start';
+    clearInterval(intervalId);
+}
+function resetTimer(){
+    clearInterval(intervalId);
+    isRunning=false;
+    timeLeft=120;
+    document.getElementById('startBtn').textContent='▶ Start';
+    updateDisplay();
+    randomStretch();
+}
+function completeTimer(){
+    clearInterval(intervalId);
+    isRunning=false;
+    document.getElementById('startBtn').textContent='▶ Start';
+    document.getElementById('completionBanner').classList.remove('hidden');
+    try{new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgA').play().catch(()=>{});}catch(e){}
+}
+function closeBanner(){
+    document.getElementById('completionBanner').classList.add('hidden');
+    resetTimer();
+}
+function updateDisplay(){
+    const m=Math.floor(timeLeft/60),s=timeLeft%60;
+    document.getElementById('timeDisplay').textContent=m+':'+(s<10?'0':'')+s;
+    const progress=((totalTime-timeLeft)/totalTime)*CIRCUMFERENCE;
+    document.getElementById('timerCircle').style.strokeDashoffset=CIRCUMFERENCE-progress;
+}
+function randomStretch(){
+    const s=stretches[Math.floor(Math.random()*stretches.length)];
+    document.getElementById('stretchTitle').textContent=s.title;
+    document.querySelector('.bg-green-50').textContent=s.instruction;
+}
+updateDisplay();
+</script>
+</body>
+</html>

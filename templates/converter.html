@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚕️ Medical Unit Converter</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>body{font-family:'Nunito',sans-serif}input:focus{outline:none;border-color:#1565c0}</style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 p-8">
+<div class="max-w-4xl mx-auto">
+    <header class="text-center mb-8"><h1 class="text-3xl font-extrabold text-blue-800">⚕️ Medical Unit Converter</h1><p class="text-gray-600">Real-time clinical calculations</p></header>
+    <div class="grid md:grid-cols-3 gap-6">
+        <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-200">
+            <div class="flex items-center gap-3 mb-4"><div class="w-12 h-12 bg-gradient-to-br from-red-400 to-pink-500 rounded-xl flex items-center justify-center text-2xl">💉</div><div><div class="font-bold">Blood Sugar</div><div class="text-xs text-gray-500">mg/dL ↔ mmol/L</div></div></div>
+            <div class="mb-3"><label class="text-xs font-bold text-gray-500 uppercase">Enter Value</label>
+                <div class="flex gap-2"><input type="number" id="sugarIn" placeholder="100" oninput="convSugar()" class="flex-1 px-3 py-2 border-2 border-gray-200 rounded-xl text-lg font-bold">
+                    <select id="sugarUnit" onchange="convSugar()" class="px-3 py-2 border-2 border-gray-200 rounded-xl font-semibold"><option value="mg">mg/dL</option><option value="mmol">mmol/L</option></select></div>
+            </div>
+            <div class="bg-blue-50 rounded-xl p-4 text-center"><div class="text-xs text-gray-500 uppercase">Result</div><div class="text-3xl font-extrabold text-blue-600" id="sugarOut">5.56</div><div class="text-sm text-gray-500" id="sugarUnitOut">mmol/L</div></div>
+            <div class="mt-3 p-2 bg-yellow-50 border border-yellow-200 rounded-lg text-xs text-yellow-700">⚠️ Verify clinical calculations</div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-200">
+            <div class="flex items-center gap-3 mb-4"><div class="w-12 h-12 bg-gradient-to-br from-purple-400 to-indigo-500 rounded-xl flex items-center justify-center text-2xl">⚖️</div><div><div class="font-bold">Weight</div><div class="text-xs text-gray-500">lbs ↔ kg</div></div></div>
+            <div class="mb-3"><label class="text-xs font-bold text-gray-500 uppercase">Enter Value</label>
+                <div class="flex gap-2"><input type="number" id="wtIn" placeholder="150" oninput="convWt()" class="flex-1 px-3 py-2 border-2 border-gray-200 rounded-xl text-lg font-bold">
+                    <select id="wtUnit" onchange="convWt()" class="px-3 py-2 border-2 border-gray-200 rounded-xl font-semibold"><option value="lbs">lbs</option><option value="kg">kg</option></select></div>
+            </div>
+            <div class="bg-blue-50 rounded-xl p-4 text-center"><div class="text-xs text-gray-500 uppercase">Result</div><div class="text-3xl font-extrabold text-blue-600" id="wtOut">68.04</div><div class="text-sm text-gray-500" id="wtUnitOut">kg</div></div>
+            <div class="mt-3 p-2 bg-yellow-50 border border-yellow-200 rounded-lg text-xs text-yellow-700">⚠️ Critical for pediatric dosing</div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-200">
+            <div class="flex items-center gap-3 mb-4"><div class="w-12 h-12 bg-gradient-to-br from-orange-400 to-red-500 rounded-xl flex items-center justify-center text-2xl">🌡️</div><div><div class="font-bold">Temperature</div><div class="text-xs text-gray-500">°F ↔ °C</div></div></div>
+            <div class="mb-3"><label class="text-xs font-bold text-gray-500 uppercase">Enter Value</label>
+                <div class="flex gap-2"><input type="number" id="tmpIn" placeholder="98.6" oninput="convTmp()" class="flex-1 px-3 py-2 border-2 border-gray-200 rounded-xl text-lg font-bold">
+                    <select id="tmpUnit" onchange="convTmp()" class="px-3 py-2 border-2 border-gray-200 rounded-xl font-semibold"><option value="F">°F</option><option value="C">°C</option></select></div>
+            </div>
+            <div class="bg-blue-50 rounded-xl p-4 text-center"><div class="text-xs text-gray-500 uppercase">Result</div><div class="text-3xl font-extrabold text-blue-600" id="tmpOut">37.0</div><div class="text-sm text-gray-500" id="tmpUnitOut">°C</div></div>
+            <div class="mt-3 p-2 bg-yellow-50 border border-yellow-200 rounded-lg text-xs text-yellow-700">⚠️ Normal: 36.5-37.5°C</div>
+        </div>
+    </div>
+</div>
+<script>
+function convSugar(){const v=parseFloat(document.getElementById('sugarIn').value)||0;const u=document.getElementById('sugarUnit').value;if(u==='mg'){document.getElementById('sugarOut').textContent=(v/18).toFixed(2);document.getElementById('sugarUnitOut').textContent='mmol/L'}else{document.getElementById('sugarOut').textContent=(v*18).toFixed(2);document.getElementById('sugarUnitOut').textContent='mg/dL'}}
+function convWt(){const v=parseFloat(document.getElementById('wtIn').value)||0;const u=document.getElementById('wtUnit').value;if(u==='lbs'){document.getElementById('wtOut').textContent=(v*0.453592).toFixed(2);document.getElementById('wtUnitOut').textContent='kg'}else{document.getElementById('wtOut').textContent=(v/0.453592).toFixed(2);document.getElementById('wtUnitOut').textContent='lbs'}}
+function convTmp(){const v=parseFloat(document.getElementById('tmpIn').value);const u=document.getElementById('tmpUnit').value;if(u==='F'){document.getElementById('tmpOut').textContent=((v-32)*5/9).toFixed(1);document.getElementById('tmpUnitOut').textContent='°C'}else{document.getElementById('tmpOut').textContent=((v*9/5)+32).toFixed(1);document.getElementById('tmpUnitOut').textContent='°F'}}
+convSugar();convWt();convTmp();
+</script>
+</body>
+</html>

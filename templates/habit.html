@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+{% block content %}
+<header class="bg-white/80 backdrop-blur-sm shadow-sm px-8 py-6">
+    <h1 class="text-2xl font-extrabold text-gray-800 flex items-center gap-3"><span>🌼</span> Healthy Habit Tracker</h1>
+</header>
+<div class="p-8">
+    <div class="bg-white rounded-2xl shadow-lg p-6 mb-6 border-2 border-vc-green/30">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <div class="relative w-24 h-24">
+                    <svg class="w-full h-full transform -rotate-90">
+                        <circle cx="48" cy="48" r="40" stroke="#e5e7eb" stroke-width="6" fill="none"/>
+                        <circle cx="48" cy="48" r="40" stroke="#98FB98" stroke-width="6" fill="none" stroke-dasharray="251" stroke-dashoffset="{{ 251 - (251 * avg / 100) }}" stroke-linecap="round"/>
+                    </svg>
+                    <div class="absolute inset-0 flex items-center justify-center"><span class="text-xl font-extrabold text-vc-green">{{ avg }}%</span></div>
+                </div>
+                <div>
+                    <p class="text-2xl font-extrabold text-gray-800">{{ habits|selectattr('done')|list|length }} / {{ habits|length }}</p>
+                    <p class="text-gray-500">Habits completed today</p>
+                </div>
+            </div>
+            {% if avg == 100 %}<span class="text-4xl">🎉</span>{% endif %}
+        </div>
+    </div>
+    <div class="grid md:grid-cols-3 gap-4">
+        {% for h in habits %}
+            <div class="card-h bg-white rounded-2xl shadow-lg p-5 border-2 {{ 'border-vc-green' if h.done else 'border-gray-100' }}">
+                <div class="flex justify-between items-start mb-3">
+                    <div class="flex items-center gap-3">
+                        <span class="text-4xl">{{ h.icon }}</span>
+                        <div><h3 class="font-bold text-gray-800">{{ h.name }}</h3><p class="text-sm text-gray-500">{{ h.current }} / {{ h.target }}</p></div>
+                    </div>
+                    {% if h.done %}<span class="text-2xl">🏆</span>{% endif %}
+                </div>
+                <div class="h-2 bg-gray-100 rounded-full mb-3"><div class="h-full bg-gradient-to-r from-vc-green to-green-400 rounded-full" style="width:{{ h.progress }}%"></div></div>
+                <div class="flex gap-2">
+                    <a href="/habit/inc/{{ h.id }}" class="flex-1 bg-vc-green text-white text-center font-semibold py-2 rounded-xl hover:bg-green-400 transition {{ 'opacity-50' if h.done else '' }}">+ Add</a>
+                    {% if h.current > 0 %}<a href="/habit/reset/{{ h.id }}" class="px-3 bg-gray-100 text-gray-600 rounded-xl hover:bg-gray-200">↩️</a>{% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

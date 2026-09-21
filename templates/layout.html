@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VITALCORE - Health Companion</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { nunito: ['Nunito', 'sans-serif'] },
+                    colors: {
+                        vc: { blue: '#4A90D9', pink: '#FFB6C1', green: '#98FB98',
+                             purple: '#DDA0DD', coral: '#FF7F7F', dark: '#1a1a2e' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Nunito', sans-serif; }
+        .nav-item { transition: all 0.2s; }
+        .nav-item:hover, .nav-item.active {
+            background: linear-gradient(135deg, #4A90D9 0%, #6B5B95 100%);
+            color: white;
+        }
+        .card-h { transition: transform 0.2s, box-shadow 0.2s; }
+        .card-h:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        .pulse { animation: pulse 2s infinite; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+<div class="flex">
+    <!-- Sidebar -->
+    <aside class="fixed left-0 top-0 h-screen w-72 bg-white shadow-xl z-50 flex flex-col border-r border-gray-100">
+        <div class="p-6 border-b border-gray-100 bg-gradient-to-r from-vc-blue to-vc-purple">
+            <div class="flex items-center gap-3">
+                <span class="text-4xl pulse">🏥</span>
+                <div>
+                    <h1 class="font-extrabold text-white text-lg leading-tight">VITALCORE</h1>
+                    <p class="text-xs text-white/70">Health Companion</p>
+                </div>
+            </div>
+        </div>
+
+        <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
+            <p class="text-xs font-bold text-gray-400 uppercase tracking-wider px-4 mb-2">Dashboard</p>
+            <a href="/" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl {{ 'active' if request.endpoint == 'dashboard' else 'text-gray-600 hover:bg-gray-100' }}">
+                <span>🏠</span><span>Home</span>
+            </a>
+
+            <p class="text-xs font-bold text-gray-400 uppercase tracking-wider px-4 mt-4 mb-2">Tracking</p>
+            <a href="/medicine" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl {{ 'active' if request.endpoint == 'medicine' else 'text-gray-600 hover:bg-gray-100' }}">
+                <span>💊</span><span>Medicine</span>
+            </a>
+            <a href="/water" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl {{ 'active' if request.endpoint == 'water' else 'text-gray-600 hover:bg-gray-100' }}">
+                <span>💧</span><span>Water</span>
+            </a>
+            <a href="/diary" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl {{ 'active' if request.endpoint == 'diary' else 'text-gray-600 hover:bg-gray-100' }}">
+                <span>🩹</span><span>Health Diary</span>
+            </a>
+            <a href="/habit" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl {{ 'active' if request.endpoint == 'habit' else 'text-gray-600 hover:bg-gray-100' }}">
+                <span>🌼</span><span>Habits</span>
+            </a>
+
+            <p class="text-xs font-bold text-gray-400 uppercase tracking-wider px-4 mt-4 mb-2">Health Tools</p>
+            <a href="/bmi" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl {{ 'active' if request.endpoint == 'bmi' else 'text-gray-600 hover:bg-gray-100' }}">
+                <span>🩺</span><span>BMI Calculator</span>
+            </a>
+            <a href="/symptom" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl {{ 'active' if request.endpoint == 'symptom' else 'text-gray-600 hover:bg-gray-100' }}">
+                <span>🌸</span><span>Symptom Checker</span>
+            </a>
+            <a href="/firstaid" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl {{ 'active' if request.endpoint == 'firstaid' else 'text-gray-600 hover:bg-gray-100' }}">
+                <span>🧸</span><span>First Aid Guide</span>
+            </a>
+            <a href="/appointment" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl {{ 'active' if request.endpoint == 'appointment' else 'text-gray-600 hover:bg-gray-100' }}">
+                <span>🐻</span><span>Appointments</span>
+            </a>
+
+            <p class="text-xs font-bold text-gray-400 uppercase tracking-wider px-4 mt-4 mb-2">Wellness</p>
+            <a href="/vision" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl {{ 'active' if request.endpoint == 'vision' else 'text-gray-600 hover:bg-gray-100' }}">
+                <span>👁️</span><span>Vision Test</span>
+            </a>
+            <a href="/quiz" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl {{ 'active' if request.endpoint == 'quiz' else 'text-gray-600 hover:bg-gray-100' }}">
+                <span>📝</span><span>Med Quiz</span>
+            </a>
+            <a href="/converter" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl {{ 'active' if request.endpoint == 'converter' else 'text-gray-600 hover:bg-gray-100' }}">
+                <span>⚕️</span><span>Converter</span>
+            </a>
+            <a href="/hearing" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl {{ 'active' if request.endpoint == 'hearing' else 'text-gray-600 hover:bg-gray-100' }}">
+                <span>🔊</span><span>Hearing Test</span>
+            </a>
+            <a href="/stretch" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl {{ 'active' if request.endpoint == 'stretch' else 'text-gray-600 hover:bg-gray-100' }}">
+                <span>⏱️</span><span>Stretch Timer</span>
+            </a>
+        </nav>
+
+        <div class="p-4 border-t border-gray-100 text-center">
+            <p class="text-xs text-gray-400">VITALCORE v1.0</p>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="ml-72 flex-1 min-h-screen">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="p-4">
+                    {% for cat, msg in messages %}
+                        <div class="p-4 rounded-xl mb-2
+                            {{ 'bg-green-100 border border-green-300 text-green-800' if cat == 'success' else '' }}
+                            {{ 'bg-blue-100 border border-blue-300 text-blue-800' if cat == 'info' else '' }}
+                            {{ 'bg-red-100 border border-red-300 text-red-800' if cat == 'danger' else '' }}
+                            {{ 'bg-yellow-100 border border-yellow-300 text-yellow-800' if cat == 'warning' else '' }}">
+                            {{ msg }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+</div>
+
+</body>
+</html>

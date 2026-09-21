@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+{% block content %}
+<header class="bg-white/80 backdrop-blur-sm shadow-sm px-8 py-6">
+    <h1 class="text-2xl font-extrabold text-gray-800 flex items-center gap-3"><span>💊</span> Medicine Reminder</h1>
+</header>
+<div class="p-8">
+    <div class="grid md:grid-cols-3 gap-6">
+        <div class="bg-white rounded-2xl shadow-lg p-6 border-2 border-vc-pink/30">
+            <h2 class="text-lg font-bold mb-4">➕ Add Medicine</h2>
+            <form action="/medicine/add" method="POST" class="space-y-4">
+                <input type="text" name="name" required placeholder="Medicine name" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-vc-blue focus:outline-none">
+                <input type="text" name="dosage" required placeholder="Dosage (e.g., 500mg)" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-vc-blue focus:outline-none">
+                <input type="time" name="time" required class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-vc-blue focus:outline-none">
+                <button type="submit" class="w-full bg-gradient-to-r from-vc-pink to-vc-coral text-white font-bold py-3 rounded-xl hover:shadow-lg transition">Add Medicine 💊</button>
+            </form>
+        </div>
+        <div class="md:col-span-2">
+            <h2 class="text-lg font-bold mb-4">📋 Your Medicines</h2>
+            {% if medicines %}
+                <div class="grid sm:grid-cols-2 gap-4">
+                    {% for m in medicines %}
+                        <div class="card-h bg-white rounded-2xl shadow-lg p-5 border-2 {{ 'border-gray-200 opacity-70' if m.taken else 'border-blue-200' }}">
+                            {% if m.taken %}
+                                <span class="bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full">✅ Taken</span>
+                            {% else %}
+                                <span class="bg-vc-coral/10 text-vc-coral text-xs font-bold px-3 py-1 rounded-full">⏰ {{ m.time }}</span>
+                            {% endif %}
+                            <h3 class="text-lg font-bold text-gray-800 mt-2">{{ m.name }}</h3>
+                            <p class="text-gray-500 text-sm">Dosage: {{ m.dosage }}</p>
+                            <div class="flex gap-2 mt-3">
+                                {% if not m.taken %}
+                                    <a href="/medicine/taken/{{ m.id }}" class="flex-1 bg-green-100 text-green-700 text-center font-semibold py-2 rounded-xl hover:bg-green-200 transition">✓ Taken</a>
+                                {% endif %}
+                                <a href="/medicine/delete/{{ m.id }}" class="{{ 'flex-1' if m.taken else '' }} bg-red-100 text-red-600 font-semibold py-2 rounded-xl hover:bg-red-200 transition text-center">🗑️</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="bg-white rounded-2xl shadow-lg p-12 text-center border-2 border-dashed border-gray-300">
+                    <span class="text-6xl block mb-4">💊</span>
+                    <p class="text-gray-400">No medicines added yet</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

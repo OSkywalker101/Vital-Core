@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+{% block content %}
+<header class="bg-white/80 backdrop-blur-sm shadow-sm px-8 py-6">
+    <h1 class="text-2xl font-extrabold text-gray-800 flex items-center gap-3"><span>🐻</span> Hospital Appointments</h1>
+</header>
+<div class="p-8">
+    <div class="grid lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2 space-y-6">
+            <div class="bg-white rounded-2xl shadow-lg p-6 border-2 border-blue-200">
+                <h2 class="text-lg font-bold mb-4">👤 Register Patient</h2>
+                <form action="/appointment/register" method="POST" class="grid md:grid-cols-3 gap-4">
+                    <input type="text" name="name" required placeholder="Full Name" class="px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-vc-blue focus:outline-none">
+                    <input type="tel" name="phone" required placeholder="Phone" class="px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-vc-blue focus:outline-none">
+                    <input type="email" name="email" placeholder="Email (optional)" class="px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-vc-blue focus:outline-none">
+                    <div class="md:col-span-3"><button type="submit" class="w-full bg-gradient-to-r from-vc-blue to-blue-500 text-white font-bold py-3 rounded-xl hover:shadow-lg transition">➕ Register</button></div>
+                </form>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-lg p-6 border-2 border-vc-green/30">
+                <h2 class="text-lg font-bold mb-4">📅 Book Appointment</h2>
+                <form action="/appointment/book" method="POST" class="grid md:grid-cols-2 gap-4">
+                    <select name="patient_id" required class="px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-vc-blue focus:outline-none">
+                        <option value="">-- Select Patient --</option>
+                        {% for p in patients %}<option value="{{ p.id }}">{{ p.name }} ({{ p.phone }})</option>{% endfor %}
+                    </select>
+                    <select name="doctor" id="doctorSel" required class="px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-vc-blue focus:outline-none" onchange="updateSpec()">
+                        <option value="">-- Select Doctor --</option>
+                        {% for d in doctors %}<option value="{{ d.name }}" data-spec="{{ d.specialty }}">{{ d.name }} - {{ d.specialty }}</option>{% endfor %}
+                    </select>
+                    <input type="hidden" name="specialty" id="specInput">
+                    <input type="date" name="date" required class="px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-vc-blue focus:outline-none">
+                    <select name="time" required class="px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-vc-blue focus:outline-none">
+                        <option value="">-- Time --</option>
+                        <option>09:00</option><option>10:00</option><option>11:00</option>
+                        <option>14:00</option><option>15:00</option><option>16:00</option>
+                    </select>
+                    <div class="md:col-span-2"><button type="submit" class="w-full bg-gradient-to-r from-vc-green to-green-400 text-white font-bold py-3 rounded-xl hover:shadow-lg transition">📅 Book Appointment</button></div>
+                </form>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-lg p-6 border-2 border-vc-coral/30 sticky top-24">
+            <h2 class="text-lg font-bold mb-4">📋 Appointments</h2>
+            {% if appointments %}
+                <div class="space-y-3 max-h-96 overflow-y-auto">
+                    {% for a in appointments %}
+                        <div class="bg-gray-50 rounded-xl p-4 border border-gray-200">
+                            <div class="flex justify-between"><div><p class="font-bold text-gray-800">{{ a.patient_name }}</p><p class="text-sm text-vc-blue">{{ a.doctor }}</p></div><a href="/appointment/cancel/{{ a.id }}" class="text-red-400 hover:text-red-600">🗑️</a></div>
+                            <div class="flex gap-2 mt-2 text-xs"><span class="bg-blue-100 text-blue-700 px-2 py-1 rounded">📅 {{ a.date }}</span><span class="bg-green-100 text-green-700 px-2 py-1 rounded">🕐 {{ a.time }}</span></div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center py-8"><span class="text-5xl block mb-3">📅</span><p class="text-gray-400">No appointments</p></div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<script>function updateSpec(){const s=document.getElementById('doctorSel').options[document.getElementById('doctorSel').selectedIndex].dataset.spec;document.getElementById('specInput').value=s||''}</script>
+{% endblock %}

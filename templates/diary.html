@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+{% block content %}
+<header class="bg-white/80 backdrop-blur-sm shadow-sm px-8 py-6">
+    <h1 class="text-2xl font-extrabold text-gray-800 flex items-center gap-3"><span>🩹</span> Health Diary</h1>
+</header>
+<div class="p-8">
+    <div class="grid md:grid-cols-3 gap-6">
+        <div class="bg-white rounded-2xl shadow-lg p-6 border-2 border-vc-purple/30 sticky top-24">
+            <h2 class="text-lg font-bold mb-4">✏️ New Entry</h2>
+            <form action="/diary/add" method="POST" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-600 mb-2">Mood</label>
+                    <div class="grid grid-cols-5 gap-2">
+                        {% for m in moods %}
+                            <label class="cursor-pointer text-center">
+                                <input type="radio" name="mood" value="{{ m.id }}" class="sr-only" required>
+                                <span class="block text-2xl p-2 rounded-xl hover:bg-gray-100 transition">{{ m.emoji }}</span>
+                            </label>
+                        {% endfor %}
+                    </div>
+                </div>
+                <input type="number" name="sleep" step="0.5" placeholder="Sleep (hours)" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-vc-purple focus:outline-none">
+                <input type="number" name="water" min="0" placeholder="Water (glasses)" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-vc-purple focus:outline-none">
+                <textarea name="notes" rows="3" placeholder="Notes..." class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-vc-purple focus:outline-none resize-none"></textarea>
+                <button type="submit" class="w-full bg-gradient-to-r from-vc-purple to-pink-400 text-white font-bold py-3 rounded-xl hover:shadow-lg transition">Save Entry 📝</button>
+            </form>
+        </div>
+        <div class="md:col-span-2">
+            <h2 class="text-lg font-bold mb-4">📖 Entries</h2>
+            {% if entries %}
+                <div class="space-y-4">
+                    {% for e in entries %}
+                        <div class="card-h bg-white rounded-2xl shadow-lg p-5 border-2 border-blue-200">
+                            {% for m in moods %}
+                                {% if m.id == e.mood %}
+                                    <div class="flex items-center gap-3 mb-3">
+                                        <span class="text-4xl">{{ m.emoji }}</span>
+                                        <div><p class="font-bold text-gray-800">{{ m.label }}</p><p class="text-sm text-gray-500">{{ e.created_at|dt }}</p></div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                            <div class="grid grid-cols-2 gap-3 mb-3">
+                                <div class="bg-blue-50 rounded-xl p-3 text-center"><span class="text-xl">😴</span><p class="text-sm">Sleep: <strong>{{ e.sleep_hours }}h</strong></p></div>
+                                <div class="bg-cyan-50 rounded-xl p-3 text-center"><span class="text-xl">💧</span><p class="text-sm">Water: <strong>{{ e.water }} glasses</strong></p></div>
+                            </div>
+                            {% if e.notes %}<p class="text-sm text-gray-700 bg-gray-50 rounded-xl p-3">{{ e.notes }}</p>{% endif %}
+                            <a href="/diary/delete/{{ e.id }}" class="text-red-400 hover:text-red-600 text-sm mt-2 inline-block">🗑️ Delete</a>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="bg-white rounded-2xl shadow-lg p-12 text-center border-2 border-dashed border-gray-300">
+                    <span class="text-6xl block mb-4">📝</span>
+                    <p class="text-gray-400">No entries yet</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

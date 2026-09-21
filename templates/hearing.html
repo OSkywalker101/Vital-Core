@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔊 Hearing Frequency Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>body{font-family:'Nunito',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center}@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}.pulse{animation:pulse 1s infinite}</style>
+</head>
+<body class="bg-gray-900 text-white">
+<div class="text-center p-8 max-w-lg">
+    <div id="warningScreen">
+        <div class="text-6xl mb-6">🔊</div>
+        <h1 class="text-3xl font-extrabold mb-4">Hearing Frequency Test</h1>
+        <div class="bg-yellow-600/20 border-2 border-yellow-500 rounded-xl p-4 mb-6">
+            <p class="text-yellow-400 font-bold mb-2">⚠️ Safety Warning</p>
+            <p class="text-sm">Turn down your volume before starting. Use headphones for best results.</p>
+        </div>
+        <button onclick="startTest()" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-4 px-12 rounded-full text-xl hover:scale-105 transition">Start Test 🎧</button>
+    </div>
+
+    <div id="testScreen" style="display:none">
+        <h1 class="text-2xl font-extrabold mb-4">Hearing Frequency Test</h1>
+        <div class="my-8"><p class="text-gray-400 mb-2">Current Frequency</p>
+            <div class="text-6xl font-black text-purple-400 pulse" id="freqDisplay">2,000 Hz</div>
+        </div>
+        <div class="w-full bg-gray-700 rounded-full h-4 mb-8"><div class="bg-gradient-to-r from-purple-500 to-pink-500 h-4 rounded-full transition-all" id="progressBar" style="width:0%"></div></div>
+        <button onclick="stopTest()" class="bg-gradient-to-r from-red-500 to-red-600 text-white font-bold py-6 px-12 rounded-full text-xl hover:scale-105 transition">I can no longer hear this tone 🔇</button>
+    </div>
+
+    <div id="resultScreen" style="display:none">
+        <div class="text-6xl mb-4">👂</div>
+        <h1 class="text-3xl font-extrabold mb-2">Test Complete!</h1>
+        <div class="text-5xl font-black text-purple-400 mb-4" id="finalFreq">16,000 Hz</div>
+        <p class="text-xl text-gray-300 mb-2" id="resultText">Good hearing</p>
+        <p class="text-gray-500 mb-6" id="ageContext">Typical for adults under 30</p>
+        <button onclick="restartTest()" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-3 px-8 rounded-full hover:scale-105 transition">Test Again</button>
+    </div>
+</div>
+
+<script>
+let audioCtx,oscillator,gainNode,interval,frequency=2000;
+function startTest(){document.getElementById('warningScreen').style.display='none';document.getElementById('testScreen').style.display='block';initAudio();frequency=2000;updateDisplay();interval=setInterval(()=>{frequency+=500;if(frequency>=20000){stopTest();return}updateDisplay()},1000)}
+function initAudio(){audioCtx=new(window.AudioContext||window.webkitAudioContext)();oscillator=audioCtx.createOscillator();gainNode=audioCtx.createGain();oscillator.type='sine';oscillator.frequency.value=frequency;gainNode.gain.value=0.1;oscillator.connect(gainNode);gainNode.connect(audioCtx.destination);oscillator.start()}
+function updateDisplay(){document.getElementById('freqDisplay').textContent=frequency.toLocaleString()+' Hz';document.getElementById('progressBar').style.width=((frequency-2000)/18000*100)+'%'}
+function stopTest(){clearInterval(interval);if(oscillator){oscillator.stop();audioCtx.close()}document.getElementById('testScreen').style.display='none';document.getElementById('resultScreen').style.display='block';document.getElementById('finalFreq').textContent=frequency.toLocaleString()+' Hz';let t,a;if(frequency>=18000){t='Excellent!';a='Under 25'}else if(frequency>=16000){t='Good';a='Under 30'}else if(frequency>=14000){t='Normal';a='Under 40'}else if(frequency>=12000){t='Fair';a='Under 50'}else{t='Some decline';a='Consider checkup'}document.getElementById('resultText').textContent=t;document.getElementById('ageContext').textContent='Typical for '+a}
+function restartTest(){document.getElementById('resultScreen').style.display='none';document.getElementById('warningScreen').style.display='block'}
+</script>
+</body>
+</html>
