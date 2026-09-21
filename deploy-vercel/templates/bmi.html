@@ -1,0 +1,63 @@
+{% extends "layout.html" %}
+{% block content %}
+<header class="bg-white/80 backdrop-blur-sm shadow-sm px-8 py-6">
+    <h1 class="text-2xl font-extrabold text-gray-800 flex items-center gap-3"><span>🩺</span> BMI Calculator</h1>
+</header>
+<div class="p-8">
+    <div class="max-w-lg mx-auto">
+        <div class="bg-white rounded-2xl shadow-lg p-8 border-2 border-blue-200">
+            <div class="space-y-4 mb-6">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-600 mb-1">Height (cm)</label>
+                    <input type="number" id="height" placeholder="170" step="0.1" min="50" max="250"
+                        class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-vc-blue focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-600 mb-1">Weight (kg)</label>
+                    <input type="number" id="weight" placeholder="65" step="0.1" min="20" max="300"
+                        class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-vc-blue focus:outline-none">
+                </div>
+                <button onclick="calc()" class="w-full bg-gradient-to-r from-vc-blue to-blue-500 text-white font-bold py-3 rounded-xl hover:shadow-lg transition">
+                    Calculate BMI 🩺
+                </button>
+            </div>
+            <div id="result" class="hidden text-center p-6 rounded-xl bg-blue-50">
+                <p class="text-sm text-gray-500">Your BMI is</p>
+                <p id="bmiVal" class="text-5xl font-extrabold text-vc-blue my-2">--</p>
+                <p id="bmiCat" class="text-lg font-bold px-4 py-1 rounded-full inline-block">--</p>
+                <p id="bmiAdv" class="text-gray-600 mt-3"></p>
+            </div>
+        </div>
+        <div class="bg-white rounded-2xl shadow-lg p-6 mt-6">
+            <h3 class="font-bold text-gray-800 mb-4">📏 BMI Scale</h3>
+            <div class="space-y-3">
+                <div class="flex items-center gap-3 p-3 rounded-xl bg-blue-50"><span class="text-2xl">🩵</span><div><p class="font-bold">Underweight</p><p class="text-sm text-gray-500">BMI < 18.5</p></div></div>
+                <div class="flex items-center gap-3 p-3 rounded-xl bg-green-50"><span class="text-2xl">💚</span><div><p class="font-bold">Normal</p><p class="text-sm text-gray-500">BMI 18.5 - 24.9</p></div></div>
+                <div class="flex items-center gap-3 p-3 rounded-xl bg-yellow-50"><span class="text-2xl">💛</span><div><p class="font-bold">Overweight</p><p class="text-sm text-gray-500">BMI 25 - 29.9</p></div></div>
+                <div class="flex items-center gap-3 p-3 rounded-xl bg-red-50"><span class="text-2xl">❤️</span><div><p class="font-bold">Obese</p><p class="text-sm text-gray-500">BMI 30+</p></div></div>
+            </div>
+            <div class="mt-4 p-4 bg-yellow-50 rounded-xl border border-yellow-200">
+                <p class="text-sm text-yellow-700">⚠️ <strong>Disclaimer:</strong> BMI is basic. Consult a healthcare provider.</p>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+function calc(){
+    const h=parseFloat(document.getElementById('height').value);
+    const w=parseFloat(document.getElementById('weight').value);
+    if(!h||!w){alert('Enter valid height and weight');return;}
+    const bmi=w/((h/100)*(h/100));
+    document.getElementById('bmiVal').textContent=bmi.toFixed(1);
+    let cat,col,adv;
+    if(bmi<18.5){cat='🩵 Underweight';col='background:linear-gradient(135deg,#87CEEB,#B0E0E6)';adv='Gain weight healthily with nutrient foods.';}
+    else if(bmi<25){cat='💚 Normal';col='background:linear-gradient(135deg,#98FB98,#90EE90)';adv='Great! Maintain with balanced diet.';}
+    else if(bmi<30){cat='💛 Overweight';col='background:linear-gradient(135deg,#FFFACD,#FFE4B5)';adv='Reduce portions, increase activity.';}
+    else{cat='❤️ Obese';col='background:linear-gradient(135deg,#FFB6C1,#FFA07A)';adv='Consult a healthcare professional.';}
+    document.getElementById('bmiCat').textContent=cat;
+    document.getElementById('bmiCat').style.cssText=col+';display:inline-block;padding:4px 16px;border-radius:9999px';
+    document.getElementById('bmiAdv').textContent=adv;
+    document.getElementById('result').classList.remove('hidden');
+}
+</script>
+{% endblock %}

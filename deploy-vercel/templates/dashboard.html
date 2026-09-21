@@ -1,0 +1,89 @@
+{% extends "layout.html" %}
+{% block content %}
+<header class="bg-white/80 backdrop-blur-sm shadow-sm px-8 py-6">
+    <div class="flex items-center gap-3">
+        <span class="text-4xl pulse">🏥</span>
+        <div>
+            <h1 class="text-2xl font-extrabold text-gray-800">Welcome to VITALCORE</h1>
+            <p class="text-gray-500">Your all-in-one health companion</p>
+        </div>
+    </div>
+</header>
+
+<div class="p-8">
+    <!-- Stats -->
+    <div class="grid md:grid-cols-4 gap-6 mb-8">
+        <div class="card-h bg-white rounded-2xl shadow-lg p-6 border-2 border-blue-200">
+            <div class="flex justify-between mb-4"><span class="text-4xl">💧</span><span class="text-sm font-bold text-blue-500">{{ water_pct }}%</span></div>
+            <h3 class="text-2xl font-extrabold">{{ water_glasses }}</h3>
+            <p class="text-gray-500">glasses today</p>
+            <div class="mt-3 h-2 bg-blue-100 rounded-full"><div class="h-full bg-blue-400 rounded-full" style="width:{{ water_pct }}%"></div></div>
+        </div>
+        <div class="card-h bg-white rounded-2xl shadow-lg p-6 border-2 border-vc-pink/30">
+            <div class="flex justify-between mb-4"><span class="text-4xl">💊</span></div>
+            <h3 class="text-2xl font-extrabold">{{ medicine_count }}</h3>
+            <p class="text-gray-500">medicines pending</p>
+        </div>
+        <div class="card-h bg-white rounded-2xl shadow-lg p-6 border-2 border-vc-purple/30">
+            <div class="flex justify-between mb-4"><span class="text-4xl">🌼</span></div>
+            <h3 class="text-2xl font-extrabold">{{ done_habits }}/{{ total_habits }}</h3>
+            <p class="text-gray-500">habits done</p>
+            <div class="mt-3 h-2 bg-green-100 rounded-full"><div class="h-full bg-green-400 rounded-full" style="width:{{ habit_avg }}%"></div></div>
+        </div>
+        <div class="card-h bg-white rounded-2xl shadow-lg p-6 border-2 border-vc-coral/30">
+            <div class="flex justify-between mb-4"><span class="text-4xl">🐻</span></div>
+            <h3 class="text-2xl font-extrabold">{{ appointment_count }}</h3>
+            <p class="text-gray-500">appointments</p>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
+        <h2 class="text-xl font-bold text-gray-800 mb-4">⚡ Quick Actions</h2>
+        <div class="grid grid-cols-4 gap-4">
+            <a href="/medicine" class="flex items-center gap-3 p-4 bg-gradient-to-r from-vc-pink to-vc-coral text-white rounded-xl hover:shadow-lg transition font-semibold">
+                <span class="text-2xl">💊</span><span>Add Medicine</span>
+            </a>
+            <a href="/water" class="flex items-center gap-3 p-4 bg-gradient-to-r from-blue-400 to-blue-500 text-white rounded-xl hover:shadow-lg transition font-semibold">
+                <span class="text-2xl">💧</span><span>Log Water</span>
+            </a>
+            <a href="/diary" class="flex items-center gap-3 p-4 bg-gradient-to-r from-vc-purple to-pink-400 text-white rounded-xl hover:shadow-lg transition font-semibold">
+                <span class="text-2xl">📝</span><span>Write Diary</span>
+            </a>
+            <a href="/appointment" class="flex items-center gap-3 p-4 bg-gradient-to-r from-vc-green to-green-400 text-white rounded-xl hover:shadow-lg transition font-semibold">
+                <span class="text-2xl">📅</span><span>Book Appt</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- All 13 Features -->
+    <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
+        <h2 class="text-xl font-bold text-gray-800 mb-4">🏥 All 13 Health Tools</h2>
+        <div class="grid grid-cols-7 gap-3">
+            <a href="/medicine" class="text-center p-3 rounded-xl bg-blue-50 hover:bg-blue-100 transition"><span class="text-2xl block mb-1">💊</span><span class="text-xs">Medicine</span></a>
+            <a href="/bmi" class="text-center p-3 rounded-xl bg-pink-50 hover:bg-pink-100 transition"><span class="text-2xl block mb-1">🩺</span><span class="text-xs">BMI</span></a>
+            <a href="/symptom" class="text-center p-3 rounded-xl bg-purple-50 hover:bg-purple-100 transition"><span class="text-2xl block mb-1">🌸</span><span class="text-xs">Symptoms</span></a>
+            <a href="/water" class="text-center p-3 rounded-xl bg-cyan-50 hover:bg-cyan-100 transition"><span class="text-2xl block mb-1">💧</span><span class="text-xs">Water</span></a>
+            <a href="/firstaid" class="text-center p-3 rounded-xl bg-red-50 hover:bg-red-100 transition"><span class="text-2xl block mb-1">🧸</span><span class="text-xs">First Aid</span></a>
+            <a href="/diary" class="text-center p-3 rounded-xl bg-yellow-50 hover:bg-yellow-100 transition"><span class="text-2xl block mb-1">🩹</span><span class="text-xs">Diary</span></a>
+            <a href="/habit" class="text-center p-3 rounded-xl bg-green-50 hover:bg-green-100 transition"><span class="text-2xl block mb-1">🌼</span><span class="text-xs">Habits</span></a>
+            <a href="/appointment" class="text-center p-3 rounded-xl bg-orange-50 hover:bg-orange-100 transition"><span class="text-2xl block mb-1">🐻</span><span class="text-xs">Appoint</span></a>
+            <a href="/vision" class="text-center p-3 rounded-xl bg-indigo-50 hover:bg-indigo-100 transition"><span class="text-2xl block mb-1">👁️</span><span class="text-xs">Vision</span></a>
+            <a href="/quiz" class="text-center p-3 rounded-xl bg-teal-50 hover:bg-teal-100 transition"><span class="text-2xl block mb-1">📝</span><span class="text-xs">Quiz</span></a>
+            <a href="/converter" class="text-center p-3 rounded-xl bg-gray-100 hover:bg-gray-200 transition"><span class="text-2xl block mb-1">⚕️</span><span class="text-xs">Convert</span></a>
+            <a href="/hearing" class="text-center p-3 rounded-xl bg-amber-50 hover:bg-amber-100 transition"><span class="text-2xl block mb-1">🔊</span><span class="text-xs">Hearing</span></a>
+            <a href="/stretch" class="text-center p-3 rounded-xl bg-lime-50 hover:bg-lime-100 transition"><span class="text-2xl block mb-1">⏱️</span><span class="text-xs">Stretch</span></a>
+        </div>
+    </div>
+
+    <!-- Health Tips -->
+    <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-6">
+        <h2 class="text-xl font-bold text-gray-800 mb-4">💡 Daily Health Tips</h2>
+        <div class="grid md:grid-cols-3 gap-4">
+            <div class="bg-white/80 rounded-xl p-4"><span class="text-2xl">💧</span><p class="text-sm text-gray-700 mt-2">Drink 8 glasses of water daily to stay hydrated.</p></div>
+            <div class="bg-white/80 rounded-xl p-4"><span class="text-2xl">😴</span><p class="text-sm text-gray-700 mt-2">Get 7-8 hours of quality sleep each night.</p></div>
+            <div class="bg-white/80 rounded-xl p-4"><span class="text-2xl">🏃</span><p class="text-sm text-gray-700 mt-2">Exercise at least 30 minutes daily.</p></div>
+        </div>
+    </div>
+</div>
+{% endblock %}

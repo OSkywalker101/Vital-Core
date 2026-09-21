@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>👁️ Vision Acuity Test</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Nunito',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#1a1a2e;color:#eee}
+        .start-btn{background:linear-gradient(135deg,#667eea,#764ba2);color:white;border:none;padding:1rem 3rem;font-size:1.25rem;font-weight:700;border-radius:50px;cursor:pointer;transition:transform .2s}
+        .start-btn:hover{transform:scale(1.05)}
+        .e-letter{font-size:150px;font-weight:900;line-height:1;transition:all .4s ease;user-select:none}
+        .e-letter.rot-0{transform:rotate(0deg)}.e-letter.rot-90{transform:rotate(90deg)}.e-letter.rot-180{transform:rotate(180deg)}.e-letter.rot-270{transform:rotate(270deg)}
+        @keyframes shake{0%,100%{transform:translateX(0) rotate(var(--r,0deg))}25%{transform:translateX(-10px) rotate(var(--r,0deg))}75%{transform:translateX(10px) rotate(var(--r,0deg))}}
+        .e-letter.wrong{animation:shake .3s ease}
+        .arrow-btn{width:60px;height:60px;border:none;border-radius:12px;background:rgba(255,255,255,.15);color:inherit;font-size:1.5rem;cursor:pointer;transition:all .2s}
+        .arrow-btn:hover{background:rgba(255,255,255,.25);transform:scale(1.1)}
+        .strike{width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.2);transition:background .3s}
+        .strike.active{background:#ff6b6b}
+        @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+        .pulse{animation:pulse 2s infinite}
+    </style>
+</head>
+<body>
+<div class="text-center p-8">
+    <div id="startScreen">
+        <h1 class="text-3xl font-extrabold mb-2">👁️ Vision Acuity Test</h1>
+        <p class="mb-6 opacity-70">Find the E! Test your visual sharpness</p>
+        <button class="start-btn" onclick="startTest()">Start Test</button>
+    </div>
+    <div id="testScreen" style="display:none">
+        <div class="flex justify-between items-center mb-6 px-4 py-3 bg-white/10 rounded-xl max-w-md mx-auto">
+            <div>Level: <span id="levelNum" class="font-bold">1</span></div>
+            <div class="flex gap-2"><div class="strike" id="s1"></div><div class="strike" id="s2"></div><div class="strike" id="s3"></div></div>
+        </div>
+        <div class="mb-8"><div class="e-letter" id="eLetter">E</div></div>
+        <div class="grid grid-cols-3 gap-2 mb-4" style="width:200px;margin:0 auto">
+            <div></div><button class="arrow-btn" onclick="guess(0)">↑</button><div></div>
+            <button class="arrow-btn" onclick="guess(3)">←</button><div></div><button class="arrow-btn" onclick="guess(1)">→</button>
+            <div></div><button class="arrow-btn" onclick="guess(2)">↓</button><div></div>
+        </div>
+        <p class="text-sm opacity-50">Or use arrow keys (↑↓←→)</p>
+    </div>
+    <div id="resultScreen" style="display:none">
+        <div class="text-6xl mb-4" id="resultIcon">👁️</div>
+        <div class="text-3xl font-extrabold mb-2" id="resultTitle">Test Complete!</div>
+        <div class="text-xl mb-4" id="resultSubtitle"></div>
+        <div class="mb-6" id="resultDetail"></div>
+        <button class="start-btn" onclick="restartTest()">Try Again</button>
+    </div>
+</div>
+<script>
+let rot=0,level=1,strikes=0,size=150;
+const D=[{r:0},{r:90},{r:180},{r:270}];
+function nextE(){rot=D[Math.floor(Math.random()*4)].r;const e=document.getElementById('eLetter');e.className='e-letter';e.classList.add('rot-'+rot);e.style.setProperty('--r',rot+'deg')}
+function guess(d){if(document.getElementById('testScreen').style.display==='none')return;const c=D.findIndex(x=>x.r===rot);if(d===c){level++;size=Math.max(30,150-(level-1)*15);document.getElementById('levelNum').textContent=level;document.getElementById('eLetter').style.fontSize=size+'px';nextE()}else{strikes++;document.getElementById('s'+strikes).classList.add('active');document.getElementById('eLetter').classList.add('wrong');setTimeout(()=>document.getElementById('eLetter').classList.remove('wrong'),300);if(strikes>=3)endTest()}}
+function startTest(){document.getElementById('startScreen').style.display='none';document.getElementById('testScreen').style.display='block';document.getElementById('resultScreen').style.display='none';level=1;strikes=0;size=150;document.getElementById('levelNum').textContent=1;document.getElementById('eLetter').style.fontSize='150px';for(let i=1;i<=3;i++)document.getElementById('s'+i).classList.remove('active');nextE()}
+function endTest(){document.getElementById('testScreen').style.display='none';document.getElementById('resultScreen').style.display='block';let t,s,i;if(size<=45){i='🦅';t='Excellent!';s='20/20 or better'}else if(size<=75){i='👌';t='Good Vision';s='20/30 to 20/40'}else if(size<=105){i='👓';t='Fair Vision';s='20/50 to 20/70'}else{i='⚠️';t='Needs Checkup';s='20/100 or worse'}document.getElementById('resultIcon').textContent=i;document.getElementById('resultTitle').textContent=t;document.getElementById('resultSubtitle').textContent=s;document.getElementById('resultDetail').textContent='Level '+level+' reached'}
+function restartTest(){startTest()}
+document.addEventListener('keydown',e=>{if(document.getElementById('testScreen').style.display==='none')return;switch(e.key){case'ArrowUp':e.preventDefault();guess(0);break;case'ArrowRight':e.preventDefault();guess(1);break;case'ArrowDown':e.preventDefault();guess(2);break;case'ArrowLeft':e.preventDefault();guess(3);break}});
+</script>
+</body>
+</html>
